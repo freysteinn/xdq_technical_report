@@ -122,8 +122,41 @@
 
 \section{Introduction}
 
+This technical report explores the state-of-the-art network solutions based on
+the Linux kernel that provides programmability. Our ultimate goal is to discuss
+how the Linux kernel could provide high performant and flexible programmable
+network schedulers that still rely on the Linux kernel and do not break the
+kernel user-space barriers.
+
+Traditionally specialized routing functions such as network schedulers have
+needed hardware acceleration to provide performance. However, the current
+virtualization trend and the influx of cheap and powerful CPUs have created a
+paradigm shift. The current advances in CPU-based technologies and the
+availability of different kernel technologies related to networking have now
+made it possible to move this functionality from the hardware into
+software-based solutions. Hardware vendors now have access to various
+system-on-a-chip technologies that give greater flexibility, and virtualization
+platforms have diverse options for network manipulation. Part of those options
+are eBPF and XDP, which we will explore in the following chapters.
+
+We believe that these technologies have matured to the point that it is viable
+to create flexible and high performant software-based network schedulers. Either
+by extending the current infrastructure or creating a new one inspired by these
+new technologies.
+
+% Provide an explanation of how the structure of this technical report.
+
 
 \section{Programmable Schedulers}
+
+% Traffic control elements
+% - Shaping: Shaping delay packets to meet a desired rate
+% - Scheduling: Schedulers arrange and/or rearrange packets for output
+% - Classifying: Classifiers sort or separate traffic into queues
+% - Policing: Policiers measure and limit traffic in a particular queue
+% - Dropping: Dropping discards an entire packet, flow or classification
+% - Marking: Marking is a mechanism by which the packet is altered
+
 
 \subsection{Data Structures}
 
@@ -131,6 +164,34 @@
 
 
 \section{The extended Berkeley Packet Filter (eBPF)}
+
+The eBPF framework is an in-kernel virtual machine that allows specialized
+programs to execute in the kernel safely. These programs attach themselves to
+hooks provided by the different subsystems of the kernel. These types of
+programs vary but predominantly, they are related to networking, tracing, and
+security. At its core, eBPF is an instruction-set. However, as a framework, it
+provides a key-value store that enables inter-process communication called eBPF
+maps, in-kernel helper functions, and toolchains to create and manage eBPF
+programs from user-space.
+
+The eBPF instruction set is 64-bit and consists of eleven registers listed in
+table ~\ref{table:eBPF_registers}.
+
+\begin{table}
+  \caption{Frequency of Special Characters}
+  \label{tab:freq}
+  \begin{tabular}{ll}
+    \toprule
+    Register & Type                    \\
+    \midrule
+    R0       & Return value            \\
+    R1-R5    & Parameters to functions \\
+    R6-R9    & Callee saved registers  \\
+    R10      & Read-only stack pointer \\
+    \bottomrule
+\end{tabular}
+\label{table:eBPF_registers}
+\end{table}
 
 
 \section{Express Data Path (XDP)}
